@@ -21,4 +21,17 @@ FROM base AS final
 #       git \
 #       libgl1-mesa-dev
 
-RUN apt-get install -y qt6-base-dev
+################################################################################
+# Install qt
+WORKDIR /home
+RUN git clone git://code.qt.io/qt/qt5.git
+WORKDIR  /home/qt5
+RUN git checkout 5.15 && \
+    perl init-repository && \
+    ./configure -opensource -confirm-license -sql-sqlite -no-opengl && \
+    make && \
+    make install && \
+    rm -rf /home/qt5
+
+# What the container should run when it is started.
+#ENTRYPOINT [ "/home/iland" ]
